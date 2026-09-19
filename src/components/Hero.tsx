@@ -1,115 +1,88 @@
-import { useState, useEffect } from 'react';
-import { useTypewriter } from '../hooks/useTypewriter';
-import { Avatar } from './Avatar';
+import { FadeIn } from './FadeIn';
+import { ContactButton } from './ContactButton';
+import { Magnet } from './Magnet';
+import avatarImg from '../assets/avatar_cartoon.png';
 
-export function Hero() {
-  const { displayed, done } = useTypewriter({
-    text: "Glad you stopped in. I build digital products that actually work — clean code, smooth interfaces, scalable systems.",
-    speed: 34,
-    startDelay: 800,
-  });
-
-  const [pillsVisible, setPillsVisible] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  // Show pills after 400ms, independent of typewriter
-  useEffect(() => {
-    const timer = setTimeout(() => setPillsVisible(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText('sohaibazhar04@gmail.com');
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+export function Navbar() {
+  const links = [
+    { name: 'About', href: '#about' },
+    { name: 'Experience', href: '#experience' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Contact', href: '#contact' },
+  ];
 
   return (
-    <section className="relative h-screen flex flex-col overflow-hidden">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(255,255,255,0.03),transparent)] z-[1]" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-[1]" />
+    <FadeIn delay={0} y={-20} as="nav">
+      <div className="flex justify-between px-6 md:px-10 pt-6 md:pt-8">
+        {links.map((link) => (
+          <a
+            key={link.name}
+            href={link.href}
+            className="text-[#D7E2EA] font-medium uppercase tracking-wider text-sm md:text-lg lg:text-[1.4rem] hover:opacity-70 transition-opacity duration-200"
+          >
+            {link.name}
+          </a>
+        ))}
+      </div>
+    </FadeIn>
+  );
+}
 
-      {/* Content */}
-      <div className="relative z-[2] flex-1 flex flex-col md:flex-row items-center justify-end md:justify-center pb-12 md:pb-0 px-5 sm:px-8 md:px-10">
-        
-        {/* Left — Text content */}
-        <div className="max-w-xl relative z-10 order-2 md:order-1 md:mr-auto">
-          {/* Blurred intro label */}
-          <div className="pointer-events-none select-none mb-5 sm:mb-6" style={{ filter: 'blur(4px)' }}>
-            <p 
-              className="text-white font-normal leading-[1.3]"
-              style={{ fontSize: 'clamp(18px, 4vw, 26px)' }}
-            >
-              Hey there, meet Sohaib,<br />
-              Full Stack Web Developer from Lahore.
-            </p>
-          </div>
+export function HeroSection() {
+  return (
+    <section className="h-screen flex flex-col" style={{ overflowX: 'clip' }}>
+      <Navbar />
 
-          {/* Typewriter text */}
+      {/* Giant heading */}
+      <div className="overflow-hidden flex-shrink-0">
+        <FadeIn delay={0.15} y={40}>
+          <h1
+            className="hero-heading font-black uppercase tracking-tight leading-none whitespace-nowrap w-full text-[11vw] sm:text-[12vw] md:text-[13vw] lg:text-[14vw] mt-6 sm:mt-4 md:-mt-5"
+            style={{ fontFamily: 'var(--font-heading)' }}
+          >
+            Hi, i&apos;m sohaib
+          </h1>
+        </FadeIn>
+      </div>
+
+      {/* Spacer to push bottom bar down */}
+      <div className="flex-1 relative">
+        {/* Portrait - centered absolutely */}
+        <FadeIn delay={0.6} y={30} className="absolute inset-0 flex justify-center pointer-events-none">
+          <Magnet
+            padding={150}
+            strength={3}
+            activeTransition="transform 0.3s ease-out"
+            inactiveTransition="transform 0.6s ease-in-out"
+            className="absolute left-1/2 -translate-x-1/2 z-10 
+              w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px]
+              top-1/2 -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0
+              pointer-events-auto"
+          >
+            <img
+              src={avatarImg}
+              alt="Sohaib Azhar"
+              className="w-full h-auto object-contain drop-shadow-[0_0_60px_rgba(118,33,176,0.15)]"
+              draggable={false}
+            />
+          </Magnet>
+        </FadeIn>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="flex justify-between items-end pb-7 sm:pb-8 md:pb-10 px-6 md:px-10 relative z-20">
+        <FadeIn delay={0.35} y={20}>
           <p
-            className="text-white mb-5 sm:mb-6 font-normal leading-[1.35]"
-            style={{ fontSize: 'clamp(18px, 4vw, 26px)', minHeight: '54px' }}
+            className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug max-w-[160px] sm:max-w-[220px] md:max-w-[260px]"
+            style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1.5rem)' }}
           >
-            {displayed}
-            {!done && (
-              <span className="inline-block w-[2px] h-[1.1em] bg-white align-middle ml-[2px] animate-blink" />
-            )}
+            a full stack developer driven by crafting scalable and remarkable products
           </p>
+        </FadeIn>
 
-          {/* Action pills */}
-          <div
-            className="flex flex-wrap gap-y-1"
-            style={{
-              opacity: pillsVisible ? 1 : 0,
-              transform: pillsVisible ? 'translateY(0)' : 'translateY(8px)',
-              transition: 'opacity 0.4s ease, transform 0.4s ease',
-            }}
-          >
-            {/* White pills */}
-            {[
-              { label: 'View my work', href: '#work' },
-              { label: 'About me', href: '#about' },
-              { label: "Let's collaborate", href: '#contact' },
-            ].map((pill) => (
-              <a
-                key={pill.label}
-                href={pill.href}
-                className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200"
-              >
-                {pill.label}
-              </a>
-            ))}
-            {/* Download CV pill */}
-            <a
-              href="/assets/Sohaib_Azhar_CV.pdf"
-              download
-              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200"
-            >
-              Download CV
-            </a>
-            {/* Email outline pill */}
-            <button
-              onClick={handleCopyEmail}
-              className="inline-flex items-center justify-center bg-transparent text-white border border-white rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-white hover:text-black transition-colors duration-200 gap-2 sm:gap-3"
-            >
-              <span>
-                {copied ? 'Copied!' : <><span className="underline underline-offset-1">sohaibazhar04@gmail.com</span></>}
-              </span>
-              {!copied && (
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Right — Avatar */}
-        <div className="order-1 md:order-2 mb-8 md:mb-0 md:ml-12 lg:ml-20 flex-shrink-0">
-          <Avatar />
-        </div>
+        <FadeIn delay={0.5} y={20}>
+          <ContactButton />
+        </FadeIn>
       </div>
     </section>
   );

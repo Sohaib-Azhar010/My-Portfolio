@@ -1,94 +1,81 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
+import { FadeIn } from './FadeIn';
+import { AnimatedText } from './AnimatedText';
+import { Copy, Check, ArrowUpRight } from 'lucide-react';
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.querySelectorAll('.reveal-up').forEach((el, i) => {
-              setTimeout(() => el.classList.add('revealed'), i * 150);
-            });
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const handleCopyEmail = () => {
+  const handleCopy = () => {
     navigator.clipboard.writeText('sohaibazhar04@gmail.com');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <section id="contact" ref={sectionRef} className="relative py-28 sm:py-40 border-t border-white/[0.04]">
-      <div className="px-5 sm:px-8 md:px-10 max-w-4xl">
-        <h2 className="reveal-up text-[13px] sm:text-[15px] uppercase tracking-[0.2em] text-white/40 mb-10">
-          Contact
-        </h2>
-
-        <p
-          className="reveal-up text-white font-normal leading-[1.2] mb-12"
-          style={{ fontSize: 'clamp(28px, 6vw, 64px)', fontFamily: 'var(--font-heading)' }}
+    <section
+      id="contact"
+      className="relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-20 overflow-hidden"
+    >
+      {/* Heading */}
+      <FadeIn delay={0} y={40} className="mb-10 sm:mb-14">
+        <h2
+          className="hero-heading font-black uppercase leading-none tracking-tight text-center"
+          style={{ fontSize: 'clamp(3rem, 12vw, 160px)', fontFamily: 'var(--font-heading)' }}
         >
-          Have something worth building?{' '}
-          <span className="text-white/40">Let's talk.</span>
-        </p>
+          Let&apos;s talk
+        </h2>
+      </FadeIn>
 
-        {/* Email CTA */}
-        <div className="reveal-up mb-16">
-          <button
-            onClick={handleCopyEmail}
-            className="group inline-flex items-center gap-3 bg-white text-black rounded-full px-6 sm:px-8 py-3 sm:py-4 text-[16px] sm:text-[20px] font-medium hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-          >
-            {copied ? (
-              <span>Copied to clipboard ✓</span>
-            ) : (
-              <>
-                <span>sohaibazhar04@gmail.com</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-40 group-hover:opacity-100 transition-opacity">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-                </svg>
-              </>
-            )}
-          </button>
-        </div>
-
-        {/* Links */}
-        <div className="reveal-up flex flex-wrap gap-x-8 gap-y-3">
-          <a
-            href="https://www.linkedin.com/in/sohaib-azhar-37018924b/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/50 hover:text-white text-[17px] sm:text-[20px] underline underline-offset-4 decoration-white/20 hover:decoration-white/60 transition-all duration-200"
-          >
-            LinkedIn
-          </a>
-          <a
-            href="https://github.com/Sohaib-Azhar010"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/50 hover:text-white text-[17px] sm:text-[20px] underline underline-offset-4 decoration-white/20 hover:decoration-white/60 transition-all duration-200"
-          >
-            GitHub
-          </a>
-          <a
-            href="/assets/Sohaib_Azhar_CV.pdf"
-            download
-            className="text-white/50 hover:text-white text-[17px] sm:text-[20px] underline underline-offset-4 decoration-white/20 hover:decoration-white/60 transition-all duration-200"
-          >
-            Resume
-          </a>
-        </div>
+      {/* Animated subtitle */}
+      <div className="mb-12 sm:mb-16">
+        <AnimatedText
+          text="Have something worth building? I'm always open to discussing new projects, creative ideas, or opportunities to be part of something great."
+          className="text-[#D7E2EA] font-medium text-center leading-relaxed max-w-[500px]"
+        />
       </div>
+
+      {/* Email CTA */}
+      <FadeIn delay={0.2} y={20} className="mb-12 sm:mb-16">
+        <button
+          onClick={handleCopy}
+          className="group inline-flex items-center gap-3 rounded-full text-white font-medium
+            px-8 py-4 sm:px-10 sm:py-5 text-base sm:text-lg md:text-xl
+            hover:scale-105 active:scale-95 transition-transform duration-200"
+          style={{
+            background: 'linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%)',
+            boxShadow: '0px 4px 4px rgba(181, 1, 167, 0.25), 4px 4px 12px #7721B1 inset',
+            outline: '2px solid white',
+            outlineOffset: '-3px',
+          }}
+        >
+          <span>{copied ? 'Copied!' : 'sohaibazhar04@gmail.com'}</span>
+          {copied ? <Check size={18} /> : <Copy size={18} className="opacity-50 group-hover:opacity-100 transition-opacity" />}
+        </button>
+      </FadeIn>
+
+      {/* Social links */}
+      <FadeIn delay={0.3} y={20}>
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-10">
+          {[
+            { name: 'LinkedIn', href: 'https://www.linkedin.com/in/sohaib-azhar-37018924b/' },
+            { name: 'GitHub', href: 'https://github.com/Sohaib-Azhar010' },
+            { name: 'Resume', href: '/assets/Sohaib_Azhar_CV.pdf' },
+          ].map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              target={link.name !== 'Resume' ? '_blank' : undefined}
+              rel={link.name !== 'Resume' ? 'noopener noreferrer' : undefined}
+              download={link.name === 'Resume' ? true : undefined}
+              className="group inline-flex items-center gap-1.5 text-[#D7E2EA]/60 hover:text-[#D7E2EA] text-lg sm:text-xl font-medium tracking-wide transition-colors duration-200"
+            >
+              {link.name}
+              <ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 -translate-y-0.5 transition-all duration-200" />
+            </a>
+          ))}
+        </div>
+      </FadeIn>
     </section>
   );
 }
