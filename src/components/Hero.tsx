@@ -1,63 +1,113 @@
+import { useState, useEffect } from 'react';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { Avatar } from './Avatar';
 
 export function Hero() {
-  const { displayed, done } = useTypewriter({ 
-    text: "Hey, I'm Sohaib. I build digital products that actually work.", 
-    speed: 40, 
-    startDelay: 300 
+  const { displayed, done } = useTypewriter({
+    text: "Glad you stopped in. I build digital products that actually work — clean code, smooth interfaces, scalable systems.",
+    speed: 34,
+    startDelay: 800,
   });
+
+  const [pillsVisible, setPillsVisible] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Show pills after 400ms, independent of typewriter
+  useEffect(() => {
+    const timer = setTimeout(() => setPillsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('sohaibazhar04@gmail.com');
-    alert('Email copied to clipboard!');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center pt-20 pb-12 overflow-hidden">
-      {/* Background with noise/gradient */}
-      <div className="absolute inset-0 bg-background bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,255,255,0.05),rgba(255,255,255,0))] -z-20"></div>
-      
-      <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div className="flex flex-col space-y-8 z-10 text-center lg:text-left mt-8 lg:mt-0 order-2 lg:order-1">
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-tight text-white min-h-[160px] md:min-h-[120px] lg:min-h-[200px]">
-            {displayed}
-            {!done && <span className="inline-block w-[0.5ch] h-[1em] bg-white ml-1 animate-blink translate-y-2"></span>}
-          </h1>
-          
-          <p className="font-body text-lg md:text-xl text-foreground/70 max-w-xl mx-auto lg:mx-0">
-            Full Stack Web Developer working across Laravel, React, Next.js and NestJS.
-          </p>
-          
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
-            <a href="#work" className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-white/90 transition-colors">
-              View my work
-            </a>
-            <a href="#about" className="px-6 py-3 bg-transparent border border-white/20 text-white font-medium rounded-full hover:bg-white/10 transition-colors">
-              About me
-            </a>
-            <a href="#contact" className="px-6 py-3 bg-transparent border border-white/20 text-white font-medium rounded-full hover:bg-white/10 transition-colors">
-              Let's collaborate
-            </a>
-            <a href="/assets/Sohaib_Azhar_CV.pdf" download className="px-6 py-3 bg-transparent border border-white/20 text-white font-medium rounded-full hover:bg-white/10 transition-colors">
-              Download CV
-            </a>
+    <section className="relative h-screen flex flex-col overflow-hidden">
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(255,255,255,0.03),transparent)] z-[1]" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-[1]" />
+
+      {/* Content */}
+      <div className="relative z-[2] flex-1 flex flex-col md:flex-row items-center justify-end md:justify-center pb-12 md:pb-0 px-5 sm:px-8 md:px-10">
+        
+        {/* Left — Text content */}
+        <div className="max-w-xl relative z-10 order-2 md:order-1 md:mr-auto">
+          {/* Blurred intro label */}
+          <div className="pointer-events-none select-none mb-5 sm:mb-6" style={{ filter: 'blur(4px)' }}>
+            <p 
+              className="text-white font-normal leading-[1.3]"
+              style={{ fontSize: 'clamp(18px, 4vw, 26px)' }}
+            >
+              Hey there, meet Sohaib,<br />
+              Full Stack Web Developer from Lahore.
+            </p>
           </div>
 
-          <div className="pt-8">
-            <button 
-              onClick={handleCopyEmail}
-              className="text-sm font-medium text-foreground/50 hover:text-white transition-colors flex items-center gap-2 mx-auto lg:mx-0 group"
+          {/* Typewriter text */}
+          <p
+            className="text-white mb-5 sm:mb-6 font-normal leading-[1.35]"
+            style={{ fontSize: 'clamp(18px, 4vw, 26px)', minHeight: '54px' }}
+          >
+            {displayed}
+            {!done && (
+              <span className="inline-block w-[2px] h-[1.1em] bg-white align-middle ml-[2px] animate-blink" />
+            )}
+          </p>
+
+          {/* Action pills */}
+          <div
+            className="flex flex-wrap gap-y-1"
+            style={{
+              opacity: pillsVisible ? 1 : 0,
+              transform: pillsVisible ? 'translateY(0)' : 'translateY(8px)',
+              transition: 'opacity 0.4s ease, transform 0.4s ease',
+            }}
+          >
+            {/* White pills */}
+            {[
+              { label: 'View my work', href: '#work' },
+              { label: 'About me', href: '#about' },
+              { label: "Let's collaborate", href: '#contact' },
+            ].map((pill) => (
+              <a
+                key={pill.label}
+                href={pill.href}
+                className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200"
+              >
+                {pill.label}
+              </a>
+            ))}
+            {/* Download CV pill */}
+            <a
+              href="/assets/Sohaib_Azhar_CV.pdf"
+              download
+              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
-              sohaibazhar04@gmail.com
+              Download CV
+            </a>
+            {/* Email outline pill */}
+            <button
+              onClick={handleCopyEmail}
+              className="inline-flex items-center justify-center bg-transparent text-white border border-white rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-white hover:text-black transition-colors duration-200 gap-2 sm:gap-3"
+            >
+              <span>
+                {copied ? 'Copied!' : <><span className="underline underline-offset-1">sohaibazhar04@gmail.com</span></>}
+              </span>
+              {!copied && (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                </svg>
+              )}
             </button>
           </div>
         </div>
-        
-        <div className="z-10 order-1 lg:order-2 flex justify-center lg:justify-end">
+
+        {/* Right — Avatar */}
+        <div className="order-1 md:order-2 mb-8 md:mb-0 md:ml-12 lg:ml-20 flex-shrink-0">
           <Avatar />
         </div>
       </div>

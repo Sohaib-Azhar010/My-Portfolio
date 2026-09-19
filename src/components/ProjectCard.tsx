@@ -6,54 +6,62 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <div className="group relative flex flex-col justify-between p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-white/20 transition-all duration-500 overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
-      
-      <div className="space-y-6 z-10">
-        <div className="flex justify-between items-start">
-          <h3 className="font-heading text-3xl font-medium text-white group-hover:-translate-y-1 transition-transform duration-300">
-            {project.title}
-          </h3>
+    <div className="group relative border border-white/[0.06] rounded-2xl p-8 sm:p-10 hover:border-white/[0.12] hover:bg-white/[0.015] transition-all duration-500 overflow-hidden">
+      {/* Hover gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+      <div className="relative z-10">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6">
+          <div>
+            <h3 
+              className="text-white group-hover:-translate-y-0.5 transition-transform duration-300"
+              style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontFamily: 'var(--font-heading)' }}
+            >
+              {project.title}
+            </h3>
+            <p className="text-white/50 text-[15px] sm:text-[17px] mt-2 leading-[1.5]">
+              {project.description}
+            </p>
+          </div>
+
           {project.link && (
             <a 
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 bg-white/5 rounded-full hover:bg-white text-white hover:text-black transition-colors"
+              className="mt-4 sm:mt-0 flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white/60 hover:bg-white hover:text-black hover:border-white transition-all duration-200"
               aria-label={`View ${project.title}`}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
               </svg>
             </a>
           )}
         </div>
-        
-        <p className="text-foreground/70 text-lg font-light leading-relaxed">
-          {project.description}
-        </p>
-        
-        <div>
-          <h4 className="text-sm font-medium tracking-widest text-white/40 uppercase mb-3">Key Features</h4>
-          <ul className="flex flex-wrap gap-2">
+
+        <div className="mb-6">
+          <p className="text-white/25 text-[12px] uppercase tracking-[0.15em] mb-3">Key Features</p>
+          <div className="flex flex-wrap gap-2">
             {project.features.map((feature, idx) => (
-              <li key={idx} className="px-3 py-1 bg-white/5 rounded-full text-xs text-white/70 font-medium">
+              <span 
+                key={idx} 
+                className="text-[12px] sm:text-[13px] text-white/50 bg-white/[0.03] border border-white/[0.06] rounded-full px-3 py-1"
+              >
                 {feature}
-              </li>
+              </span>
             ))}
-          </ul>
+          </div>
         </div>
-      </div>
-      
-      <div className="mt-8 pt-6 border-t border-white/10 z-10">
-        <div className="flex flex-wrap gap-3">
-          {project.technologies.map((tech, idx) => (
-            <span key={idx} className="text-sm font-medium text-white group-hover:text-white/80 transition-colors">
-              {tech}
-              {idx < project.technologies.length - 1 && <span className="mx-2 text-white/30">/</span>}
-            </span>
-          ))}
+
+        <div className="pt-6 border-t border-white/[0.04]">
+          <div className="flex items-center gap-2 text-white/40 text-[14px]">
+            {project.technologies.map((tech, idx) => (
+              <span key={idx}>
+                <span className="text-white/70">{tech}</span>
+                {idx < project.technologies.length - 1 && <span className="mx-2 text-white/20">/</span>}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -5,12 +5,16 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
 
   const navLinks = [
     { name: 'About', href: '#about' },
@@ -20,63 +24,92 @@ export function Navbar() {
   ];
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-background/80 backdrop-blur-md py-4' : 'bg-transparent py-6'}`}>
-      <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
-        <a href="#" className="font-heading text-xl md:text-2xl font-medium tracking-tight text-white hover:opacity-80 transition-opacity">
-          Sohaib Azhar
-        </a>
-
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => (
-            <a key={link.name} href={link.href} className="text-sm text-foreground/80 hover:text-white transition-colors">
-              {link.name}
-            </a>
-          ))}
-        </div>
-
-        <div className="hidden md:block">
-          <a href="#contact" className="px-5 py-2.5 bg-white text-black text-sm font-medium rounded-full hover:bg-white/90 transition-colors">
-            Let's work together
-          </a>
-        </div>
-
-        {/* Mobile Hamburger */}
-        <button 
-          className="md:hidden text-white focus:outline-none z-50"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-        >
-          <div className="w-6 flex flex-col items-end space-y-1.5 relative z-50">
-            <span className={`block h-0.5 bg-white transition-all duration-300 ${isOpen ? 'w-6 rotate-45 translate-y-2' : 'w-6'}`}></span>
-            <span className={`block h-0.5 bg-white transition-all duration-300 w-6 ${isOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-            <span className={`block h-0.5 bg-white transition-all duration-300 ${isOpen ? 'w-6 -rotate-45 -translate-y-2' : 'w-4'}`}></span>
-          </div>
-        </button>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 bg-background/95 backdrop-blur-xl z-40 flex flex-col justify-center items-center transition-all duration-500 md:hidden ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-        <div className="flex flex-col items-center space-y-8">
-          {navLinks.map((link) => (
-            <a 
-              key={link.name} 
-              href={link.href} 
-              className="font-heading text-3xl text-white hover:text-white/70 transition-colors"
-              onClick={() => setIsOpen(false)}
+    <>
+      <nav 
+        className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+          scrolled ? 'bg-black/60 backdrop-blur-xl' : 'bg-transparent'
+        }`}
+      >
+        <div className="flex justify-between items-center px-5 sm:px-8 py-4 sm:py-5">
+          {/* Logo */}
+          <a href="#" className="flex items-center gap-3">
+            <span 
+              className="text-[21px] sm:text-[26px] tracking-tight text-white"
+              style={{ fontFamily: 'var(--font-heading)' }}
             >
-              {link.name}
-            </a>
-          ))}
+              Sohaib Azhar
+            </span>
+            <span className="text-[25px] sm:text-[30px] text-white select-none" style={{ letterSpacing: '-0.02em' }}>
+              ✳︎
+            </span>
+          </a>
+
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center text-[23px] text-white">
+            {navLinks.map((link, i) => (
+              <span key={link.name}>
+                <a href={link.href} className="hover:opacity-60 transition-opacity duration-200">
+                  {link.name}
+                </a>
+                {i < navLinks.length - 1 && <span className="mx-1">,</span>}
+              </span>
+            ))}
+          </div>
+
+          {/* Desktop CTA */}
           <a 
             href="#contact" 
-            className="mt-8 px-8 py-3 bg-white text-black text-lg font-medium rounded-full hover:bg-white/90 transition-colors"
+            className="hidden md:inline text-[23px] text-white underline underline-offset-2 hover:opacity-60 transition-opacity duration-200"
+          >
+            Get in touch
+          </a>
+
+          {/* Mobile hamburger */}
+          <button 
+            className="md:hidden flex flex-col gap-[5px] z-50 relative" 
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            <span 
+              className="block w-6 h-[2px] bg-white hamburger-line"
+              style={{ transform: isOpen ? 'rotate(45deg) translateY(7px)' : 'none' }}
+            />
+            <span 
+              className="block w-6 h-[2px] bg-white hamburger-line"
+              style={{ opacity: isOpen ? 0 : 1 }}
+            />
+            <span 
+              className="block w-6 h-[2px] bg-white hamburger-line"
+              style={{ transform: isOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }}
+            />
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile overlay */}
+      <div 
+        className={`fixed inset-0 bg-black/90 backdrop-blur-md z-40 flex flex-col justify-center px-8 gap-8 transition-opacity duration-300 md:hidden ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {navLinks.map((link) => (
+          <a 
+            key={link.name} 
+            href={link.href} 
+            className="text-[32px] font-medium text-white hover:opacity-60 transition-opacity duration-200"
             onClick={() => setIsOpen(false)}
           >
-            Let's work together
+            {link.name}
           </a>
-        </div>
+        ))}
+        <a 
+          href="#contact" 
+          className="text-[32px] text-white underline underline-offset-4 hover:opacity-60 transition-opacity duration-200"
+          onClick={() => setIsOpen(false)}
+        >
+          Get in touch
+        </a>
       </div>
-    </nav>
+    </>
   );
 }

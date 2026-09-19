@@ -1,14 +1,12 @@
 export function Footer() {
-  const currentYear = new Date().getFullYear();
-  
   return (
-    <footer className="py-8 border-t border-white/5 relative z-10">
-      <div className="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-white/40 text-sm">
-          &copy; {currentYear} Sohaib Azhar. All rights reserved.
+    <footer className="border-t border-white/[0.04] py-6 sm:py-8">
+      <div className="px-5 sm:px-8 md:px-10 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <p className="text-white/25 text-[13px] sm:text-[14px]">
+          &copy; {new Date().getFullYear()} Sohaib Azhar
         </p>
-        <p className="text-white/40 text-sm flex items-center gap-1">
-          Designed and built with <span className="text-white">Next.js & React</span>
+        <p className="text-white/25 text-[13px] sm:text-[14px]">
+          Lahore, Pakistan
         </p>
       </div>
     </footer>
